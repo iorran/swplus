@@ -2,14 +2,27 @@ import { ErrorMessage } from "@hookform/error-message";
 import { VStack, FormControl, Input, Button, Text } from "native-base";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useHouseStore } from "../../contexts/House";
+import { useToast } from "native-base";
 
-export default function HouseForm() {
+type HouseFormProps = {
+  latitude: number;
+  longitude: number;
+};
+
+export default function HouseForm({ latitude, longitude }: HouseFormProps) {
+  const { save } = useHouseStore();
+  const toast = useToast();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data: any) => console.log(data);
+
+  const onSubmit = (data: any) => {
+    save({ ...data, latitude, longitude });
+    toast.show({ description: "Registro salvo com sucesso", placement: "top" });
+  };
 
   return (
     <VStack space={2}>

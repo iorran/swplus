@@ -7,7 +7,7 @@ export default function App() {
     <NativeBaseProvider>
       <StatusBar backgroundColor="primary.500" />
       <Box safeAreaTop bg="primary.500" />
-      <Box flex="1" borderWidth="1" borderStyle="dashed">
+      <Box flex="1">
         <Home />
       </Box>
     </NativeBaseProvider>

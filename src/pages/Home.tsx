@@ -5,7 +5,7 @@ import { useLocation } from "../hooks/useLocation";
 
 import DotMarker from "../components/markers/DotMarker";
 import MeMarker from "../components/markers/MeMarker";
-import HouseForm from "../components/old/houses/HouseForm";
+import HouseForm from "../components/houses/HouseForm";
 import { useAtomValue } from "jotai/utils";
 import { CURRENT_TOOL_ATOM } from "../contexts/Tool";
 import { useDotMarker } from "../contexts/Dot";
@@ -23,7 +23,6 @@ export default function Home() {
   const [mapType] = useState<MapTypes>("satellite");
 
   function handleLongPress(mapEvent: MapEvent) {
-    console.log(mapEvent.nativeEvent.coordinate, currentTool);
     if (currentTool === "dot") addDotMarker(mapEvent.nativeEvent.coordinate);
     if (currentTool === "line") addLineMarker(mapEvent.nativeEvent.coordinate);
   }
@@ -57,7 +56,7 @@ export default function Home() {
             longitude={longitude}
             onRemove={onRemove}
           >
-            <HouseForm />
+            <HouseForm latitude={latitude} longitude={longitude} />
           </DotMarker>
         ))}
         {lineMarkers.map((lineMarker) => (

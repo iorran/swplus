@@ -2,23 +2,27 @@ import { atom } from 'jotai'
 import { useAtomValue, useUpdateAtom } from 'jotai/utils';
 import { LatLng } from 'react-native-maps';
 import uuid from "react-native-uuid";
+import { useHouseStore } from './House';
 
 export type IDotAtom = {
-    id: string;
-    latitude: number;
-    longitude: number;
-    children?: React.ReactNode;
-    onRemove: (latitude: number, longitude: number) => void;
+  id: string;
+  latitude: number;
+  longitude: number;
+  children?: React.ReactNode;
+  onRemove: (latitude: number, longitude: number) => void;
 };
 
 export const DOTS_ATOM = atom<Array<IDotAtom>>([]);
 
 export const useDotMarker = () => {
+  const { remove: removeHouse } = useHouseStore()
 
   const setDotMarkers = useUpdateAtom(DOTS_ATOM);
   const dotMarkers = useAtomValue(DOTS_ATOM);
 
   const handleRemoveDotMarker = (latitude: number, longitude: number) => {
+    removeHouse(latitude, longitude)
+
     setDotMarkers((currentDotMarkers) =>
       currentDotMarkers.filter(
         (dotMarker) =>
