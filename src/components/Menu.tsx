@@ -1,57 +1,53 @@
+import React from "react";
+import { AntDesign } from "@expo/vector-icons";
+import {
+  Actionsheet,
+  Box,
+  Text,
+  Center,
+  Fab,
+  Icon,
+  useDisclose,
+} from "native-base";
+import { CURRENT_TOOL_ATOM, ICurrentToolAtom } from "../contexts/Tool";
 import { useAtom } from "jotai";
-import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
-/* @ts-ignore */
-import { FloatingMenu } from "react-native-floating-action-menu";
-import { CURRENT_TOOL_ATOM } from "../contexts/Tool";
 
-const items = [
-  { label: "Pontos" },
-  { label: "Linhas" },
-  { label: "Círculos" },
-  { label: "Exportar" },
+const items: { label: string; value: ICurrentToolAtom }[] = [
+  { label: "Pontos", value: "dot" },
+  { label: "Linhas", value: "line" },
+  { label: "Círculos", value: "circle" },
+  { label: "Exportar", value: "export" },
 ];
 
-export default function Menu() {
+const Menu = () => {
   const [, setCurrentTool] = useAtom(CURRENT_TOOL_ATOM);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const handleMenuToggle = (isMenuOpen: boolean) => setIsMenuOpen(isMenuOpen);
-
-  const handleItemPress = (item: any, index: number) => {
-    switch (item.label) {
-      case "Pontos":
-        setCurrentTool("dot");
-        break;
-      case "Linhas":
-        setCurrentTool("line");
-        break;
-      case "Círculos":
-        setCurrentTool("circle");
-        break;
-      case "Exportar":
-        alert("export");
-        break;
-    }
-    setIsMenuOpen(false);
+  const { isOpen, onOpen, onClose } = useDisclose();
+  const selectItem = (value: ICurrentToolAtom) => {
+    setCurrentTool(value);
+    onClose();
   };
-
   return (
-    <View style={styles.container}>
-      <FloatingMenu
-        isOpen={isMenuOpen}
-        items={items}
-        onMenuToggle={handleMenuToggle}
-        onItemPress={handleItemPress}
+    <Center>
+      <Fab
+        onPress={onOpen}
+        shadow={2}
+        size="sm"
+        icon={<Icon color="white" as={AntDesign} name="plus" size="sm" />}
       />
-    </View>
+      <Actionsheet isOpen={isOpen} onClose={onClose}>
+        <Actionsheet.Content>
+          {items.map((item) => (
+            <Actionsheet.Item
+              key={item.label}
+              onPress={() => selectItem(item.value)}
+            >
+              {item.label}
+            </Actionsheet.Item>
+          ))}
+        </Actionsheet.Content>
+      </Actionsheet>
+    </Center>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "100%",
-    position: "relative",
-  },
-});
+export default Menu;

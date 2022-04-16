@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from "react-native";
 import FinishButton from "./buttons/FinishButton";
 import { Ionicons } from "@expo/vector-icons";
 import { useAtom } from "jotai";
-import { CURRENT_TOOL_ATOM } from "../contexts/Tool";
+import { CURRENT_TOOL_ATOM } from "../../contexts/Tool";
 
 const label = {
   line: "Linha",
